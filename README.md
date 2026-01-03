@@ -41,7 +41,7 @@ Chaque compte est caractérisé par :
 
 ---
 
-## 🔄 Gestion des transactions
+Gestion des transactions
 
 Les clients peuvent effectuer plusieurs transactions sur leurs comptes :
 - **Dépôt (versement)**  
