@@ -1,5 +1,6 @@
 package glsi.api.tp_jee_egab.Repository;
 
+import glsi.api.tp_jee_egab.Model.Client;
 import glsi.api.tp_jee_egab.Model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -11,3 +12,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByEmail(String email);
 
 }
+
