@@ -1,0 +1,86 @@
+
+type User {
+    id: ID!
+    email: String!
+    role: Role!
+}
+
+type Admin {
+    id: ID!
+    email: String!
+    role: Role!
+    createdAt: String
+}
+
+type Agent {
+    id: ID!
+    email: String!
+    role: Role!
+    matricule: String
+    firstName: String!
+    lastName: String!
+}
+
+type Client {
+    id: ID!
+    email: String!
+    role: Role!
+    firstName: String!
+    lastName: String!
+    dateNaissance: String!
+    city: String!
+    nationality: String!
+    numberNationality: Int!
+}
+
+
+enum Role {
+    ADMIN
+    AGENT
+    CLIENT
+}
+
+# DTO pour les réponses
+type AuthResponse {
+    token: String!
+    user: UserDTO!
+}
+
+type UserDTO {
+    id: ID!
+    email: String!
+    role: Role!
+}
+
+# Inputs pour les mutations
+input LoginInput {
+    email: String!
+    password: String!
+    role: Role
+}
+
+input RegisterInput {
+    email: String!
+    password: String!
+    role: Role!
+    firstName: String
+    lastName: String
+    matricule: String
+    dateNaissance: String
+    city: String
+    nationality: String
+    numberNationality: Int
+}
+
+# Queries
+type Query {
+    hello: String
+    me: UserDTO
+}
+
+# Mutations
+type Mutation {
+    # Authentification
+    login(input: LoginInput!): AuthResponse!
+    register(input: RegisterInput!): AuthResponse!
+}

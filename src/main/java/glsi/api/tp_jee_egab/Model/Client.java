@@ -10,26 +10,36 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Entity
-@Table(name = "client")
-@NoArgsConstructor
+@Table(name = "clients")
 @AllArgsConstructor
-@DiscriminatorValue("client_type")
+@DiscriminatorValue("CLIENT")
 @Data
 public class Client extends User{
 
-    @NotBlank
+    @Column(nullable = false)
     private String firstName;
-    @NotBlank
+
+    @Column(nullable = false)
     private String lastName;
-    @NotBlank
+
+    @Column(nullable = false)
     private LocalDate dateNaissance;
-    @NotBlank
+
+    @Column(nullable = false)
     private String city;
-    @NotBlank
-    private String natinality;
-    @NotBlank
-    private int numberNationlity;
+
+    @Column(nullable = false)
+    private String nationality;
+
+    @Column(nullable = false)
+    private Integer numberNationality;
 
     @OneToMany(mappedBy = "client")
     private List<Compte> comptes;
+
+    public Client() {
+        super();
+        this.setRole(Role.CLIENT);
+    }
+
 }

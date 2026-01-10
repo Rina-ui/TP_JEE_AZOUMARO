@@ -1,25 +1,27 @@
 package glsi.api.tp_jee_egab.Model;
 
-import jakarta.persistence.DiscriminatorValue;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "agent")
-@NoArgsConstructor
+@Table(name = "agents")
 @AllArgsConstructor
 @Data
-@DiscriminatorValue("agent_type")
+@DiscriminatorValue("AGENT")
 public class Agent extends User {
 
-    @NotBlank
+    @Column(nullable = false)
     private String department;
-    @NotBlank
+
+    @Column(nullable = false)
     private String matricule;
+
+    public Agent() {
+        super();
+        this.setRole(Role.AGENT);
+    }
 
 }

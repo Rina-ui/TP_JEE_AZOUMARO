@@ -9,11 +9,16 @@ import java.time.LocalDate;
 public class RegisterRequest {
     private String email;
     private String password;
+    private Role role;
+
     private String firstName;
     private String lastName;
+
+    private String matricule;
+
     private LocalDate dateNaissance;
-    private Role role;
     private String city;
-    private String natinality;
-    private int numberNationlity;
+    private String nationality;
+    private Integer numberNationality;
+
 }
