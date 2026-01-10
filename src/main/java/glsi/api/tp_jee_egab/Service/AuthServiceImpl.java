@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-class AuthServiceImpl {
+public class AuthServiceImpl {
 
     private final UserRepository userRepository;
     private PasswordEncoder passwordEncoder;

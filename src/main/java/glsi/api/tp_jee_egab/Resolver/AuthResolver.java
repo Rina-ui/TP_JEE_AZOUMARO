@@ -4,7 +4,9 @@ import glsi.api.tp_jee_egab.DTO.AuthRequest;
 import glsi.api.tp_jee_egab.DTO.LoginRequest;
 import glsi.api.tp_jee_egab.DTO.RegisterRequest;
 import glsi.api.tp_jee_egab.Model.Role;
+import glsi.api.tp_jee_egab.Model.User;
 import glsi.api.tp_jee_egab.Service.AuthService;
+import glsi.api.tp_jee_egab.Service.AuthServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
@@ -17,7 +19,7 @@ import java.time.LocalDate;
 @RequiredArgsConstructor
 public class AuthResolver {
 
-    private  AuthService authService;
+    private final AuthServiceImpl authService;
 
     @MutationMapping
     public AuthRequest login(@Argument LoginInput input) {
@@ -30,7 +32,7 @@ public class AuthResolver {
     }
 
     @MutationMapping
-    public AuthRequest register(@Argument RegisterInput input) {
+    public User register(@Argument RegisterInput input) {
         RegisterRequest request = new RegisterRequest();
         request.setEmail(input.email());
         request.setPassword(input.password());
