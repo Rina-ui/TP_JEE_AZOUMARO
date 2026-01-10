@@ -68,6 +68,7 @@ public class AuthResolver {
             String firstName,
             String lastName,
             String matricule,
+            String department,
             String dateNaissance,
             String city,
             String nationality,

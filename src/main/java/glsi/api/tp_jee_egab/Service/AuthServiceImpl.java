@@ -21,9 +21,8 @@ import org.springframework.stereotype.Service;
 public class AuthServiceImpl {
 
     private final UserRepository userRepository;
-    private PasswordEncoder passwordEncoder;
-    private JwtUtils jwtUtils;
-
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtils jwtUtils;
 
     //Login
     public AuthRequest login(LoginRequest request) {
@@ -58,6 +57,7 @@ public class AuthServiceImpl {
             case AGENT:
                 Agent agent = new Agent();
                 agent.setMatricule(request.getMatricule());
+                agent.setDepartment(request.getDepartment);
                 user = agent;
                 break;
             case CLIENT:

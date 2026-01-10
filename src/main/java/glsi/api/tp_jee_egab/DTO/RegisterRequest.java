@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 @Data
 public class RegisterRequest {
+    public String getDepartment;
     private String email;
     private String password;
     private Role role;

@@ -70,6 +70,7 @@ input RegisterInput {
     city: String
     nationality: String
     numberNationality: Int
+    department: String
 }
 
 # Queries
