@@ -92,7 +92,21 @@ input UpdateClientInput{
     dateNaissance: String
     city: String
     nationality: String
-    numberNationality:
+    numberNationality: Int
+}
+
+type AgentDTO{
+    id: ID!
+    email: String!
+    role: Role!
+    matricule: String!
+    department: String!
+}
+
+input UpdateAgentInput{
+    email: String
+    matricule: String
+    department: String
 }
 
 # Queries
@@ -103,6 +117,10 @@ type Query {
     #Crud Client
     getAllClients: [ClientDTO!]!
     getClientById(id: ID!): ClientDTO!
+
+    #crud agent
+    getAllAgents: [AgentDTO!]!
+    getAgentById(id: ID!): AgentDTO!
 }
 
 # Mutations
@@ -114,4 +132,8 @@ type Mutation {
     #crud client
     updateClient(id: ID!, input: UpdateClientInput!): ClientDTO!
     deleteClient(id: ID!): Boolean!
+
+    #crud agent
+    updateAgent(id: ID!, input: UpdateAgentInput!): AgentDTO!
+    deleteAgent(id: ID!): Boolean!
 }
