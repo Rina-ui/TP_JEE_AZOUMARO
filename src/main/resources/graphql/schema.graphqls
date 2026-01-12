@@ -73,10 +73,36 @@ input RegisterInput {
     department: String
 }
 
+type ClientDTO{
+    id: ID!
+    email: String!
+    role: Role!
+    firstName: String!
+    lastName: String!
+    dateNaissance: String!
+    city: String!
+    nationality: String!
+    numberNationality: Int!
+}
+
+input UpdateClientInput{
+    email: String
+    firstName: String
+    lastName: String
+    dateNaissance: String
+    city: String
+    nationality: String
+    numberNationality:
+}
+
 # Queries
 type Query {
     hello: String
     me: UserDTO
+
+    #Crud Client
+    getAllClients: [ClientDTO!]!
+    getClientById(id: ID!): ClientDTO!
 }
 
 # Mutations
@@ -84,4 +110,8 @@ type Mutation {
     # Authentification
     login(input: LoginInput!): AuthResponse!
     register(input: RegisterInput!): AuthResponse!
+
+    #crud client
+    updateClient(id: ID!, input: UpdateClientInput!): ClientDTO!
+    deleteClient(id: ID!): Boolean!
 }
