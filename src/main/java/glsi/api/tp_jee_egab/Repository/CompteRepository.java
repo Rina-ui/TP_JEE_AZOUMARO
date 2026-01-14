@@ -12,5 +12,6 @@ public interface CompteRepository extends JpaRepository<Compte, Long> {
     Optional<Compte> findByAccountNumber(String accountNumber);
     List<Compte> findByClient(Client client);
     List<Compte> findByClientAndActifTrue(Client client);
+    List<Compte> findByActifTrue();
 
 }
