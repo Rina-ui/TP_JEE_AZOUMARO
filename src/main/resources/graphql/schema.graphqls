@@ -109,6 +109,37 @@ input UpdateAgentInput{
     department: String
 }
 
+type CompteDTO {
+    id: ID!
+    numeroCompte: String!
+    solde: Float!
+    typeCompte: TypeCompte!
+    actif: Boolean!
+    clientId: ID!
+    clientNom: String
+}
+
+enum TypeCompte {
+    COURANT
+    EPARGNE
+    ENTREPRISE
+}
+
+input CompteDTOInput {
+    numeroCompte: String!
+    solde: Float!
+    typeCompte: TypeCompte!
+}
+
+input UpdateCompteRequestInput {
+    numeroCompte: String
+    solde: Float
+    typeCompte: TypeCompte
+    actif: Boolean
+}
+
+
+
 # Queries
 type Query {
     hello: String
@@ -121,6 +152,13 @@ type Query {
     #crud agent
     getAllAgents: [AgentDTO!]!
     getAgentById(id: ID!): AgentDTO!
+
+    #compte
+    getAllComptes: [CompteDTO!]!
+    getCompteById(id: ID!): CompteDTO
+    getCompteByNumero(numeroCompte: String!): CompteDTO
+    getComptesByClient(clientId: ID!): [CompteDTO!]!
+    getComptesActifsByClient(clientId: ID!): [CompteDTO!]!
 }
 
 # Mutations
@@ -136,4 +174,11 @@ type Mutation {
     #crud agent
     updateAgent(id: ID!, input: UpdateAgentInput!): AgentDTO!
     deleteAgent(id: ID!): Boolean!
+
+    #compte
+    createCompte(clientId: ID!, input: CompteDTOInput!): CompteDTO!
+    updateCompte(id: ID!, input: UpdateCompteRequestInput!): CompteDTO!
+    deleteCompte(id: ID!): Boolean!
+    activerCompte(id: ID!): CompteDTO!
+    desactiverCompte(id: ID!): CompteDTO!
 }
