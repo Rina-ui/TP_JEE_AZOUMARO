@@ -20,7 +20,7 @@ public class Compte {
     private String accountNumber;
 
     @Enumerated(EnumType.STRING)
-    private TypeCompte account;
+    private TypeCompte typeCompte;
     private BigDecimal sold;
 
     private Boolean actif = true;

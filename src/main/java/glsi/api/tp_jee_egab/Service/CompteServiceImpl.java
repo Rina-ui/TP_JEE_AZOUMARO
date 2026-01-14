@@ -30,7 +30,7 @@ class CompteServiceImpl implements CompteService {
         Compte compte = new Compte();
         compte.setAccountNumber(compteDTO.getAccountNumber());
         compte.setSold(compteDTO.getSold());
-        compte.setAccount(compteDTO.getAccount());
+        compte.setTypeCompte(compteDTO.getTypeCompte());
         compte.setClient(client);
 
         Compte saved = compteRepository.save(compte);
@@ -89,8 +89,8 @@ class CompteServiceImpl implements CompteService {
         if (request.getSold() != null) {
             compte.setSold(request.getSold());
         }
-        if (request.getAccount() != null) {
-            compte.setAccount(request.getAccount());
+        if (request.getTypeCompte() != null) {
+            compte.setTypeCompte(request.getTypeCompte());
         }
 
         Compte updated = compteRepository.save(compte);

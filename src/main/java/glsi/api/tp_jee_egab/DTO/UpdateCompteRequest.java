@@ -13,6 +13,6 @@ import java.math.BigDecimal;
 public class UpdateCompteRequest {
     private String accountNumber;
     private BigDecimal sold;
-    private TypeCompte account;
+    private TypeCompte typeCompte;
     private Boolean actif = true;
 }

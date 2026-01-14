@@ -15,7 +15,7 @@ public class CompteDTO {
     private Long id;
     private String accountNumber;
     private BigDecimal sold;
-    private TypeCompte account;
+    private TypeCompte typeCompte;
     private Boolean actif = true;
 
   public static CompteDTO fromCompte (Compte compte) {
@@ -23,7 +23,7 @@ public class CompteDTO {
       dto.setId(compte.getId());
       dto.setAccountNumber(compte.getAccountNumber());
       dto.setSold(compte.getSold());
-      dto.setAccount(compte.getAccount());
+      dto.setTypeCompte(compte.getTypeCompte());
       dto.setActif(compte.getActif());
 
       return dto;
