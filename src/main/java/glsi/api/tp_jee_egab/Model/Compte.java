@@ -23,6 +23,8 @@ public class Compte {
     private TypeCompte account;
     private BigDecimal sold;
 
+    private Boolean actif = true;
+
     @ManyToOne
     private Client client;
 

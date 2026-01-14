@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface CompteRepository extends JpaRepository<Compte, Long> {
 
-    Optional<Compte> findByNumeroCompte(String numeroCompte);
+    Optional<Compte> findByAccountNumber(String accountNumber);
     List<Compte> findByClient(Client client);
     List<Compte> findByClientAndActifTrue(Client client);
 

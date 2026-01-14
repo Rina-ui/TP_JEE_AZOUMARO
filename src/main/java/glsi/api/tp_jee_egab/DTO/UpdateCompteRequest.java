@@ -14,4 +14,5 @@ public class UpdateCompteRequest {
     private String accountNumber;
     private BigDecimal sold;
     private TypeCompte account;
+    private Boolean actif = true;
 }

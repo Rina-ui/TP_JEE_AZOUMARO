@@ -16,6 +16,7 @@ public class CompteDTO {
     private String accountNumber;
     private BigDecimal sold;
     private TypeCompte account;
+    private Boolean actif = true;
 
   public static CompteDTO fromCompte (Compte compte) {
       CompteDTO dto = new CompteDTO();
@@ -23,6 +24,7 @@ public class CompteDTO {
       dto.setAccountNumber(compte.getAccountNumber());
       dto.setSold(compte.getSold());
       dto.setAccount(compte.getAccount());
+      dto.setActif(compte.getActif());
 
       return dto;
   }
