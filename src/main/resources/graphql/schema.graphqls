@@ -1,0 +1,139 @@
+
+type User {
+    id: ID!
+    email: String!
+    role: Role!
+}
+
+type Admin {
+    id: ID!
+    email: String!
+    role: Role!
+    createdAt: String
+}
+
+type Agent {
+    id: ID!
+    email: String!
+    role: Role!
+    matricule: String
+    firstName: String!
+    lastName: String!
+}
+
+type Client {
+    id: ID!
+    email: String!
+    role: Role!
+    firstName: String!
+    lastName: String!
+    dateNaissance: String!
+    city: String!
+    nationality: String!
+    numberNationality: Int!
+}
+
+
+enum Role {
+    ADMIN
+    AGENT
+    CLIENT
+}
+
+# DTO pour les réponses
+type AuthResponse {
+    token: String!
+    user: UserDTO!
+}
+
+type UserDTO {
+    id: ID!
+    email: String!
+    role: Role!
+}
+
+# Inputs pour les mutations
+input LoginInput {
+    email: String!
+    password: String!
+    role: Role
+}
+
+input RegisterInput {
+    email: String!
+    password: String!
+    role: Role!
+    firstName: String
+    lastName: String
+    matricule: String
+    dateNaissance: String
+    city: String
+    nationality: String
+    numberNationality: Int
+    department: String
+}
+
+type ClientDTO{
+    id: ID!
+    email: String!
+    role: Role!
+    firstName: String!
+    lastName: String!
+    dateNaissance: String!
+    city: String!
+    nationality: String!
+    numberNationality: Int!
+}
+
+input UpdateClientInput{
+    email: String
+    firstName: String
+    lastName: String
+    dateNaissance: String
+    city: String
+    nationality: String
+    numberNationality: Int
+}
+
+type AgentDTO{
+    id: ID!
+    email: String!
+    role: Role!
+    matricule: String!
+    department: String!
+}
+
+input UpdateAgentInput{
+    email: String
+    matricule: String
+    department: String
+}
+
+# Queries
+type Query {
+    hello: String
+    me: UserDTO
+
+    #Crud Client
+    getAllClients: [ClientDTO!]!
+    getClientById(id: ID!): ClientDTO!
+
+    #crud agent
+    getAllAgents: [AgentDTO!]!
+    getAgentById(id: ID!): AgentDTO!
+}
+
+# Mutations
+type Mutation {
+    # Authentification
+    login(input: LoginInput!): AuthResponse!
+    register(input: RegisterInput!): AuthResponse!
+
+    #crud client
+    updateClient(id: ID!, input: UpdateClientInput!): ClientDTO!
+    deleteClient(id: ID!): Boolean!
+
+    #crud agent
+    updateAgent(id: ID!, input: UpdateAgentInput!): AgentDTO!
+    deleteAgent(id: ID!): Boolean!
+}
