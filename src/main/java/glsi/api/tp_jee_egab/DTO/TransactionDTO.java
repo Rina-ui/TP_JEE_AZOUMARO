@@ -22,6 +22,8 @@ public class TransactionDTO {
     private LocalDateTime dateTransaction;
     private Compte compteSource;
     private Compte compteDestination;
+    private String description;
+    private BigDecimal soldeApres;
 
     public static TransactionDTO fromTransaction (Transaction transaction) {
         TransactionDTO dto = new TransactionDTO();
@@ -31,6 +33,8 @@ public class TransactionDTO {
         dto.setTypeTransaction(transaction.getTypeTransaction());
         dto.setCompteDestination(transaction.getCompteDestination());
         dto.setCompteSource(transaction.getCompteSource());
+        dto.setDescription(transaction.getDescription());
+        dto.setSoldeApres(transaction.getSoldeApres());
 
         return dto;
     }

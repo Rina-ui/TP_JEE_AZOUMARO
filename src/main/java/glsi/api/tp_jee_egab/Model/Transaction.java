@@ -23,6 +23,8 @@ public class Transaction {
 
     private BigDecimal amount;
     private LocalDateTime dateTransaction;
+    private String description;
+    private BigDecimal soldeApres;
 
     @ManyToOne
     private Compte compteSource;

@@ -111,7 +111,7 @@ input UpdateAgentInput{
 
 type CompteDTO {
     id: ID!
-    numeroCompte: String!
+    accountNumber: String!
     solde: Float!
     typeCompte: TypeCompte!
     actif: Boolean!
@@ -126,7 +126,7 @@ enum TypeCompte {
 }
 
 input CompteDTOInput {
-    numeroCompte: String!
+    accountNumber: String!
     solde: Float!
     typeCompte: TypeCompte!
 }
@@ -138,6 +138,33 @@ input UpdateCompteRequestInput {
     actif: Boolean
 }
 
+type TransactionDTO {
+    id : ID!
+    typeTransaction: TypeTransaction!
+    amount: Float!
+    dateTransaction: LocalDateTime!
+    compteSource:Compte!
+    compteDestination:Compte!
+    description:String!
+    soldeApres: Float!
+}
+
+input TransactionDTOInput {
+    id : ID!
+    typeTransaction: TypeTransaction!
+    amount: Float!
+    dateTransaction: LocalDateTime!
+    compteSource:Compte!
+    compteDestination:Compte!
+    description:String!
+    soldeApres: Float!
+}
+
+enum TypeTransaction {
+    DEPOT,
+    RETRAIT,
+    VIREMENT
+}
 
 
 # Queries
@@ -156,9 +183,11 @@ type Query {
     #compte
     getAllComptes: [CompteDTO!]!
     getCompteById(id: ID!): CompteDTO
-    getCompteByNumero(numeroCompte: String!): CompteDTO
+    getCompteByNumero(accountNumber: String!): CompteDTO
     getComptesByClient(clientId: ID!): [CompteDTO!]!
     getComptesActifsByClient(clientId: ID!): [CompteDTO!]!
+
+    #transaction
 }
 
 # Mutations
@@ -181,4 +210,6 @@ type Mutation {
     deleteCompte(id: ID!): Boolean!
     activerCompte(id: ID!): CompteDTO!
     desactiverCompte(id: ID!): CompteDTO!
+
+    #transaction
 }
