@@ -57,7 +57,7 @@ public class AuthServiceImpl {
             case AGENT:
                 Agent agent = new Agent();
                 agent.setMatricule(request.getMatricule());
-                agent.setDepartment(request.getDepartment);
+                agent.setDepartment(request.getGetDepartment());
                 user = agent;
                 break;
             case CLIENT:

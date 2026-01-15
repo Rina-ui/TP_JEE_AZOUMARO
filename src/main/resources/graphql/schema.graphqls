@@ -111,7 +111,7 @@ input UpdateAgentInput{
 
 type CompteDTO {
     id: ID!
-    numeroCompte: String!
+    accountNumber: String!
     solde: Float!
     typeCompte: TypeCompte!
     actif: Boolean!
@@ -126,7 +126,7 @@ enum TypeCompte {
 }
 
 input CompteDTOInput {
-    numeroCompte: String!
+    accountNumber: String!
     solde: Float!
     typeCompte: TypeCompte!
 }
@@ -138,7 +138,42 @@ input UpdateCompteRequestInput {
     actif: Boolean
 }
 
+type TransactionDTO {
+    id: ID!
+    type: TypeTransaction!
+    montant: Float!
+    dateTransaction: String!
+    description: String
+    numeroCompteSource: String
+    numeroCompteDestination: String
+    soldeApres: Float!
+}
 
+enum TypeTransaction {
+    DEPOT
+    RETRAIT
+    VIREMENT
+}
+
+# Inputs
+input VersementInput {
+    numeroCompte: String!
+    montant: Float!
+    description: String
+}
+
+input RetraitInput {
+    numeroCompte: String!
+    montant: Float!
+    description: String
+}
+
+input VirementInput {
+    numeroCompteSource: String!
+    numeroCompteDestination: String!
+    montant: Float!
+    description: String
+}
 
 # Queries
 type Query {
@@ -156,9 +191,17 @@ type Query {
     #compte
     getAllComptes: [CompteDTO!]!
     getCompteById(id: ID!): CompteDTO
-    getCompteByNumero(numeroCompte: String!): CompteDTO
+    getCompteByNumero(accountNumber: String!): CompteDTO
     getComptesByClient(clientId: ID!): [CompteDTO!]!
     getComptesActifsByClient(clientId: ID!): [CompteDTO!]!
+
+    #transaction
+    getAllTransactions(numeroCompte: String!): [TransactionDTO!]!
+    getTransactionsByPeriode(
+        numeroCompte: String!
+        dateDebut: String!
+        dateFin: String!
+    ): [TransactionDTO!]!
 }
 
 # Mutations
@@ -181,4 +224,9 @@ type Mutation {
     deleteCompte(id: ID!): Boolean!
     activerCompte(id: ID!): CompteDTO!
     desactiverCompte(id: ID!): CompteDTO!
+
+    #transaction
+    versement(input: VersementInput!): TransactionDTO!
+    retrait(input: RetraitInput!): TransactionDTO!
+    virement(input: VirementInput!): TransactionDTO!
 }

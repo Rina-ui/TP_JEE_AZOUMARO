@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +31,7 @@ class TransactionServiceImpl implements TransactionService {
         if (montant == null || montant.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Le montant doit être positif");
         }
-        // Récupérer le compte
+
         Compte compte = compteRepository.findByAccountNumber(numeroCompte)
                 .orElseThrow(() -> new RuntimeException("Compte " + numeroCompte + " non trouvé"));
 
@@ -38,14 +39,15 @@ class TransactionServiceImpl implements TransactionService {
             throw new RuntimeException("Le compte est inactif");
         }
 
-        // Mettre à jour le solde
-        BigDecimal nouveauSolde = compte.getSold().add(montant);
+        BigDecimal soldeActuel = compte.getSold() != null ? compte.getSold() : BigDecimal.ZERO;
+
+        BigDecimal nouveauSolde = soldeActuel.add(montant);
         compte.setSold(nouveauSolde);
         compteRepository.save(compte);
 
         // Créer la transaction
         Transaction transaction = new Transaction();
-        transaction.setType(TypeTransaction.DEPOT);
+        transaction.setTypeTransaction(TypeTransaction.DEPOT);
         transaction.setAmount(montant);
         transaction.setDescription(description != null ? description : "Versement");
         transaction.setDateTransaction(LocalDateTime.now());
@@ -58,38 +60,38 @@ class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public TransactionDTO retrait(String numeroCompte, BigDecimal montant, String description) {
+    public TransactionDTO retrait(String numeroCompte, BigDecimal amount, String description) {
         // Validation du montant
-        if (montant == null || montant.compareTo(BigDecimal.ZERO) <= 0) {
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Le montant doit être positif");
         }
 
         // Récupérer le compte
-        Compte compte = compteRepository.findByNumeroCompte(numeroCompte)
+        Compte compte = compteRepository.findByAccountNumber(numeroCompte)
                 .orElseThrow(() -> new RuntimeException("Compte " + numeroCompte + " non trouvé"));
 
         // Vérifier que le compte est actif
-        if (!compte.isActif()) {
+        if (!compte.getActif()) {
             throw new RuntimeException("Le compte est inactif");
         }
 
         // Vérifier le solde
-        if (compte.getSolde().compareTo(montant) < 0) {
-            throw new RuntimeException("Solde insuffisant. Solde actuel: " + compte.getSolde());
+        if (compte.getSold().compareTo(amount) < 0) {
+            throw new RuntimeException("Solde insuffisant. Solde actuel: " + compte.getSold());
         }
 
         // Mettre à jour le solde
-        BigDecimal nouveauSolde = compte.getSolde().subtract(montant);
-        compte.setSolde(nouveauSolde);
+        BigDecimal nouveauSolde = compte.getSold().subtract(amount);
+        compte.setSold(nouveauSolde);
         compteRepository.save(compte);
 
         // Créer la transaction
         Transaction transaction = new Transaction();
-        transaction.setType(TypeTransaction.RETRAIT);
-        transaction.setMontant(montant);
+        transaction.setTypeTransaction(TypeTransaction.RETRAIT);
+        transaction.setAmount(amount);
         transaction.setDescription(description != null ? description : "Retrait");
         transaction.setDateTransaction(LocalDateTime.now());
-        transaction.setCompteSource(compte);  // Le compte qui retire
+        transaction.setCompteSource(compte);
         transaction.setSoldeApres(nouveauSolde);
 
         Transaction savedTransaction = transactionRepository.save(transaction);
@@ -105,18 +107,18 @@ class TransactionServiceImpl implements TransactionService {
         }
 
         // Récupérer les comptes
-        Compte compteSource = compteRepository.findByNumeroCompte(numeroCompteSource)
+        Compte compteSource = compteRepository.findByAccountNumber(numeroCompteSource)
                 .orElseThrow(() -> new RuntimeException("Compte source " + numeroCompteSource + " non trouvé"));
 
-        Compte compteDestination = compteRepository.findByNumeroCompte(numeroCompteDestination)
+        Compte compteDestination = compteRepository.findByAccountNumber(numeroCompteDestination)
                 .orElseThrow(() -> new RuntimeException("Compte destination " + numeroCompteDestination + " non trouvé"));
 
         // Vérifications
-        if (!compteSource.isActif()) {
+        if (!compteSource.getActif()) {
             throw new RuntimeException("Le compte source est inactif");
         }
 
-        if (!compteDestination.isActif()) {
+        if (!compteDestination.getActif()) {
             throw new RuntimeException("Le compte destination est inactif");
         }
 
@@ -125,24 +127,24 @@ class TransactionServiceImpl implements TransactionService {
         }
 
         // Vérifier le solde
-        if (compteSource.getSolde().compareTo(montant) < 0) {
-            throw new RuntimeException("Solde insuffisant. Solde actuel: " + compteSource.getSolde());
+        if (compteSource.getSold().compareTo(montant) < 0) {
+            throw new RuntimeException("Solde insuffisant. Solde actuel: " + compteSource.getSold());
         }
 
         // Débiter le compte source
-        BigDecimal nouveauSoldeSource = compteSource.getSolde().subtract(montant);
-        compteSource.setSolde(nouveauSoldeSource);
+        BigDecimal nouveauSoldeSource = compteSource.getSold().subtract(montant);
+        compteSource.setSold(nouveauSoldeSource);
         compteRepository.save(compteSource);
 
         // Créditer le compte destination
-        BigDecimal nouveauSoldeDestination = compteDestination.getSolde().add(montant);
-        compteDestination.setSolde(nouveauSoldeDestination);
+        BigDecimal nouveauSoldeDestination = compteDestination.getSold().add(montant);
+        compteDestination.setSold(nouveauSoldeDestination);
         compteRepository.save(compteDestination);
 
         // Créer la transaction
         Transaction transaction = new Transaction();
-        transaction.setType(TypeTransaction.VIREMENT);
-        transaction.setMontant(montant);
+        transaction.setTypeTransaction(TypeTransaction.VIREMENT);
+        transaction.setAmount(montant);
         transaction.setDescription(description != null ? description :
                 "Virement de " + numeroCompteSource + " vers " + numeroCompteDestination);
         transaction.setDateTransaction(LocalDateTime.now());
@@ -156,9 +158,9 @@ class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
-    public List<TransactionDTO> getTransactionsByPeriode(String numeroCompte, LocalDateTime dateDebut, LocalDateTime dateFin) {
-        Compte compte = compteRepository.findByNumeroCompte(numeroCompte)
-                .orElseThrow(() -> new RuntimeException("Compte " + numeroCompte + " non trouvé"));
+    public List<TransactionDTO> getTransactionsByPeriode(String accountNumber, LocalDateTime dateDebut, LocalDateTime dateFin) {
+        Compte compte = compteRepository.findByAccountNumber(accountNumber)
+                .orElseThrow(() -> new RuntimeException("Compte " + accountNumber + " non trouvé"));
 
         List<Transaction> transactions = transactionRepository.findByCompteBetweenDates(
                 compte, dateDebut, dateFin
@@ -171,7 +173,7 @@ class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<TransactionDTO> getAllTransactions(String numeroCompte) {
-        Compte compte = compteRepository.findByNumeroCompte(numeroCompte)
+        Compte compte = compteRepository.findByAccountNumber(numeroCompte)
                 .orElseThrow(() -> new RuntimeException("Compte " + numeroCompte + " non trouvé"));
 
         List<Transaction> transactions = transactionRepository.findByCompte(compte);
@@ -183,20 +185,21 @@ class TransactionServiceImpl implements TransactionService {
 
     @Override
     public byte[] genererReleve(String numeroCompte, LocalDateTime dateDebut, LocalDateTime dateFin) {
-        //juste une logique metier pour l'instant
-        Compte compte = compteRepository.findByNumeroCompte(numeroCompte)
+        //juste une logique mettre ici pour l'instant apres je vais reflechir a comment faire ca
+        Compte compte = compteRepository.findByAccountNumber(numeroCompte)
                 .orElseThrow(() -> new RuntimeException("Compte " + numeroCompte + " non trouvé"));
 
         List<Transaction> transactions = transactionRepository.findByCompteBetweenDates(
                 compte, dateDebut, dateFin
         );
 
-        // TODO: Implémenter la génération PDF avec iText ou Apache PDFBox
+        //Implémenter la génération PDF avec iText ou Apache PDFBox
         String releve = "Relevé de compte pour " + numeroCompte + "\n";
         releve += "Période: " + dateDebut + " au " + dateFin + "\n";
         releve += "Nombre de transactions: " + transactions.size() + "\n";
 
         return releve.getBytes();
     }
-    }
+
 }
+
