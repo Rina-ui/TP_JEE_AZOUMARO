@@ -139,33 +139,41 @@ input UpdateCompteRequestInput {
 }
 
 type TransactionDTO {
-    id : ID!
-    typeTransaction: TypeTransaction!
-    amount: Float!
-    dateTransaction: LocalDateTime!
-    compteSource:Compte!
-    compteDestination:Compte!
-    description:String!
-    soldeApres: Float!
-}
-
-input TransactionDTOInput {
-    id : ID!
-    typeTransaction: TypeTransaction!
-    amount: Float!
-    dateTransaction: LocalDateTime!
-    compteSource:Compte!
-    compteDestination:Compte!
-    description:String!
+    id: ID!
+    type: TypeTransaction!
+    montant: Float!
+    dateTransaction: String!
+    description: String
+    numeroCompteSource: String
+    numeroCompteDestination: String
     soldeApres: Float!
 }
 
 enum TypeTransaction {
-    DEPOT,
-    RETRAIT,
+    DEPOT
+    RETRAIT
     VIREMENT
 }
 
+# Inputs
+input VersementInput {
+    numeroCompte: String!
+    montant: Float!
+    description: String
+}
+
+input RetraitInput {
+    numeroCompte: String!
+    montant: Float!
+    description: String
+}
+
+input VirementInput {
+    numeroCompteSource: String!
+    numeroCompteDestination: String!
+    montant: Float!
+    description: String
+}
 
 # Queries
 type Query {
@@ -188,6 +196,12 @@ type Query {
     getComptesActifsByClient(clientId: ID!): [CompteDTO!]!
 
     #transaction
+    getAllTransactions(numeroCompte: String!): [TransactionDTO!]!
+    getTransactionsByPeriode(
+        numeroCompte: String!
+        dateDebut: String!
+        dateFin: String!
+    ): [TransactionDTO!]!
 }
 
 # Mutations
@@ -212,4 +226,7 @@ type Mutation {
     desactiverCompte(id: ID!): CompteDTO!
 
     #transaction
+    versement(input: VersementInput!): TransactionDTO!
+    retrait(input: RetraitInput!): TransactionDTO!
+    virement(input: VirementInput!): TransactionDTO!
 }
