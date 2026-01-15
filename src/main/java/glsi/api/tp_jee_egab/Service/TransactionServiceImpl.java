@@ -31,7 +31,7 @@ class TransactionServiceImpl implements TransactionService {
         if (montant == null || montant.compareTo(BigDecimal.ZERO) <= 0) {
             throw new IllegalArgumentException("Le montant doit être positif");
         }
-        // Récupérer le compte
+
         Compte compte = compteRepository.findByAccountNumber(numeroCompte)
                 .orElseThrow(() -> new RuntimeException("Compte " + numeroCompte + " non trouvé"));
 
@@ -39,8 +39,9 @@ class TransactionServiceImpl implements TransactionService {
             throw new RuntimeException("Le compte est inactif");
         }
 
-        // Mettre à jour le solde
-        BigDecimal nouveauSolde = compte.getSold().add(montant);
+        BigDecimal soldeActuel = compte.getSold() != null ? compte.getSold() : BigDecimal.ZERO;
+
+        BigDecimal nouveauSolde = soldeActuel.add(montant);
         compte.setSold(nouveauSolde);
         compteRepository.save(compte);
 
