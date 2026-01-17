@@ -112,7 +112,7 @@ input UpdateAgentInput{
 type CompteDTO {
     id: ID!
     accountNumber: String!
-    solde: Float!
+    sold: Float!
     typeCompte: TypeCompte!
     actif: Boolean!
     clientId: ID!
@@ -127,13 +127,13 @@ enum TypeCompte {
 
 input CompteDTOInput {
     accountNumber: String
-    solde: Float!
+    sold: Float!
     typeCompte: TypeCompte!
 }
 
 input UpdateCompteRequestInput {
-    numeroCompte: String
-    solde: Float
+    accountNumber: String
+    sold: Float
     typeCompte: TypeCompte
     actif: Boolean
 }
