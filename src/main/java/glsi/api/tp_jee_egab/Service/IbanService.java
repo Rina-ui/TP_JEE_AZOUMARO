@@ -13,23 +13,13 @@ class IbanService {
 
     private final Random random = new Random();
 
-    public String generateFrenchIban() {
-        return new Iban.Builder()
-                .countryCode(CountryCode.FR)
-                .bankCode(generateNumericString(5))      // 5 chiffres
-                .branchCode(generateNumericString(5))    // 5 chiffres
-                .accountNumber(generateNumericString(11)) // 11 chiffres
-                .nationalCheckDigit(generateNumericString(2)) // 2 chiffres clé RIB
-                .build()
-                .toString();
-    }
-
     public String generateTogoIban() {
         return new Iban.Builder()
                 .countryCode(CountryCode.TG)
-                .bankCode(generateNumericString(2))
-                .branchCode(generateNumericString(2))
-                .accountNumber(generateNumericString(16))
+                .bankCode(generateNumericString(3))
+                .branchCode(generateNumericString(5))
+                .accountNumber(generateNumericString(11))
+                .nationalCheckDigit(generateNumericString(2))
                 .build()
                 .toString();
     }

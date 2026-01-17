@@ -30,7 +30,7 @@ class CompteServiceImpl implements CompteService {
 
         Compte compte = new Compte();
         if (compteDTO.getAccountNumber() == null || compteDTO.getAccountNumber().isEmpty()) {
-            compte.setAccountNumber(ibanService.generateFrenchIban());
+            compte.setAccountNumber(ibanService.generateTogoIban());
         } else {
             compte.setAccountNumber(compteDTO.getAccountNumber());
         }
