@@ -126,7 +126,7 @@ enum TypeCompte {
 }
 
 input CompteDTOInput {
-    accountNumber: String!
+    accountNumber: String
     solde: Float!
     typeCompte: TypeCompte!
 }

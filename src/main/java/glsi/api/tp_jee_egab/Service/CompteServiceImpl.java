@@ -20,6 +20,7 @@ class CompteServiceImpl implements CompteService {
 
     private final CompteRepository compteRepository;
     private final ClientRepository clientRepository;
+    private final IbanService  ibanService;
 
 
     @Override
@@ -28,7 +29,12 @@ class CompteServiceImpl implements CompteService {
                 .orElseThrow(() -> new RuntimeException("Client not found"));
 
         Compte compte = new Compte();
-        compte.setAccountNumber(compteDTO.getAccountNumber());
+        if (compteDTO.getAccountNumber() == null || compteDTO.getAccountNumber().isEmpty()) {
+            compte.setAccountNumber(ibanService.generateFrenchIban());
+        } else {
+            compte.setAccountNumber(compteDTO.getAccountNumber());
+        }
+
         compte.setSold(compteDTO.getSold());
         compte.setTypeCompte(compteDTO.getTypeCompte());
         compte.setClient(client);
